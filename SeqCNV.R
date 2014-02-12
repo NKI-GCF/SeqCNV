@@ -129,10 +129,12 @@ tng <- function(df, use, correctmapa=TRUE,  plot=NULL, verbose=T) {
 		if(!is.logical(plot)) {
 			if(verbose) cat("Plotting to file", plot,"\n")
 			png(plot, width=700, height=1400)
+			par(mfrow=c(2,1))
 			on.exit(dev.off())
 			plot <- TRUE
+		} else if(plot) {
+			par(mfrow=c(2,1))
 		}
-		par(mfrow=c(2,1))
 	}
 
 	#exclude contains the points to exclude in the 
@@ -254,6 +256,14 @@ writeAllCN <- function(data, filename, path=".") {
 	   data$ratios)
 	
 	write.table(df,file=writeto, sep="\t", row.names=F, quote=F)
+}
+
+toHMMCopy <- function(covdata) {
+	require("IRanges")
+	ran <- IRanges(start=covdata$anno$start, end=covdata$anno$end)
+	sapply(1:ncol(covdata$cov), function(s) {
+		RangedData(ran, space=covdata$anno$chr, reads=covdata$cov[,s], gc=covdata$anno$gc, map=covdata$anno$mapa)
+	})
 }
 
 sd.trim <- function(x, trim=0, na.rm=FALSE, ...)
