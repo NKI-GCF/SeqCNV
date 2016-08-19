@@ -149,7 +149,7 @@ tng <- function(df, use, correctmapa=TRUE,  plot=NULL, verbose=T) {
 	normv <- predict(final, df$gc)
 	df$countgcloess <- df$count/(normv/median(normv, na.rm=T))
 
-	if(plot) {
+	if(!is.null(plot)) {
 		plot(count ~ gc, data=df, subset=gcuse, ylim=quantile(df$count[gcuse], c(0.0001, .999)), xlim=c(.1,.8), pch=".")
 		points(count ~ gc, data=df, subset=!gcuse, col=rgb(1,0,0,.3), pch=".")
 		lines(i, predict(rough, i), col=3)
@@ -162,7 +162,7 @@ tng <- function(df, use, correctmapa=TRUE,  plot=NULL, verbose=T) {
 	lm(countgcloess~0+mapa, data=df, subset=mapause) ->fll
 	if(verbose) print(summary(fll))
 
-	if (plot) {
+	if (!is.null(plot)) {
 		plot(countgcloess ~ mapa, data=df, subset=mapause, ylim=quantile(df$countgcloess, c(0.0001, .999), na.rm=T), pch=".")
 		points(countgcloess ~ mapa, data=df, subset=!mapause, col=rgb(1,0,0,.3), pch=".")
 		abline(0, fll$coef, col=2)
